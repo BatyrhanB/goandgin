@@ -28,9 +28,11 @@ func main() {
 	validate := validator.New()
 
 	db.Table("users").AutoMigrate(&model.Users{})
+	db.Table("crypto_symbols").AutoMigrate(&model.CryptoSymbols{})
 
 	//Init Repository
 	userRepository := repository.NewUsersRepositoryImpl(db)
+	cryptoSymbolsRepository := repository.NewCryptoSymbolsRepositoryImpl(db)
 
 	//Init Service
 	authenticationService := service.NewAuthenticationServiceImpl(userRepository, validate)
@@ -39,7 +41,9 @@ func main() {
 	authenticationController := controller.NewAuthenticationController(authenticationService)
 	usersController := controller.NewUsersController(userRepository)
 
-	routes := router.NewRouter(userRepository, authenticationController, usersController)
+	cryptoSymbolsController := controller.NewCryptoSymbolsController(cryptoSymbolsRepository)
+
+	routes := router.NewRouter(userRepository, authenticationController, usersController, cryptoSymbolsController)
 
 	server := &http.Server{
 		Addr:           ":" + loadConfig.ServerPort,

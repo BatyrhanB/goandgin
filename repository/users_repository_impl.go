@@ -65,7 +65,6 @@ func (u *UsersRepositoryImpl) Update(users model.Users) {
 func (u *UsersRepositoryImpl) FindByUsername(username string) (model.Users, error) {
 	var users model.Users
 	result := u.Db.First(&users, "username = ?", username)
-
 	if result.Error != nil {
 		return users, errors.New("invalid username or Password")
 	}

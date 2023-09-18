@@ -9,7 +9,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func NewRouter(userRepository repository.UsersRepository, authenticationController *controller.AuthenticationController, usersController *controller.UserController) *gin.Engine {
+func NewRouter(userRepository repository.UsersRepository, authenticationController *controller.AuthenticationController, usersController *controller.UserController, cryptoSymbolscontroller *controller.CryptoSymbolsController) *gin.Engine {
 	service := gin.Default()
 
 	service.GET("", func(context *gin.Context) {
@@ -27,6 +27,9 @@ func NewRouter(userRepository repository.UsersRepository, authenticationControll
 
 	//usersRouter := router.Group("/users")
 	//usersRouter.GET("", middleware.DeserializeUser(userRepository), usersController.GetUsers)
+
+	cryptoRouter := router.Group("/crypto")
+	cryptoRouter.GET("/list", cryptoSymbolscontroller.GetCryptoSymbols)
 
 	return service
 }
